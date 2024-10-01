@@ -1,0 +1,6 @@
+torch~=2.4.1
+torchaudio~=2.4.1
+torchvision~=0.19.1
+openvino~=2024.4.0
+ipykernel~=6.29.5
+matplotlib~=3.9.2
