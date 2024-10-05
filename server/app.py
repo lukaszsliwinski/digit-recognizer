@@ -13,4 +13,4 @@ def index():
 
 @app.route('/data')
 def data():
-  return {'test-data': ['test1', 'test2', 'test3']}
+  return {'test': ['test1', 'test2', 'test3']}
