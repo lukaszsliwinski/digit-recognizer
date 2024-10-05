@@ -3,4 +3,4 @@ __pycache__
 digit-recognizer-env
 
 # testing virtual env
-model/test-env
+/digit-env
