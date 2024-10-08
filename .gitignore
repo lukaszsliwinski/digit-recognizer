@@ -1,6 +1,6 @@
 __pycache__
 .ipynb_checkpoints
-digit-recognizer-env
+digit-env
 
 # testing virtual env
-/digit-env
+model/test-env
