@@ -14,3 +14,6 @@ def index():
 @app.route('/data')
 def data():
   return {'test': ['test1', 'test2', 'test3']}
+
+if __name__ == '__main__':
+  app.run(host='0.0.0.0')
