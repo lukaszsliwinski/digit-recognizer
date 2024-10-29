@@ -9,7 +9,7 @@ app = Flask(__name__, static_folder='client/build', static_url_path='/')
 
 @app.errorhandler(404)
 def not_found(e):
-    return app.send_static_file('index.html')
+    return app.send_static_file('index.html') # TODO: On the client side
 
 @app.route('/')
 def index():
@@ -38,7 +38,7 @@ def recognize():
     # Define the transform to resize the image and convert to tensor
     transform = transforms.Compose([
       transforms.Resize((28, 28)),  # Resize to 28x28
-      transforms.ToTensor(),         # Convert to tensor and scale to [0, 1]
+      transforms.ToTensor(),        # Convert to tensor and scale to [0, 1]
     ])
 
     # Apply the transform
