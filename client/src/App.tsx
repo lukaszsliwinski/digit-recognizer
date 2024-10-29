@@ -7,18 +7,16 @@ import './App.css';
 function App() {
   const getData = () => {
     axios
-      .get('/data')
+      .post('/api/predict')
       .then(response => {
-        response.data.test.forEach((el: string) => {
-          console.log(el);
-        })
+        console.log(response);
       })
       .catch(error => console.error(error))
   }
 
   return (
     <div>
-      <button onClick={getData}>get data and console</button>
+      <button onClick={getData}>predict</button>
     </div>
   );
 }
