@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, FormEvent } from 'react';
+import { useState, ChangeEvent, FormEvent, DragEvent } from 'react';
 import axios from 'axios';
 import './App.css';
 
@@ -9,6 +9,7 @@ function Upload() {
   const [previewUrl, setPreviewUrl] = useState<string | undefined>(undefined);
   const [recognizedDigit, setRecognizedDigit] = useState<number | null>(null);
   const [disabled, setDisabled] = useState<boolean>(true);
+  const [isDragOver, setIsDragOver] = useState<boolean>(false);
 
   // Reset app's state to initial values
   const resetState = () => {
@@ -18,10 +19,8 @@ function Upload() {
     setDisabled(true);
   }
 
-  // Handle file selection
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    
+  // Upload file
+  const uploadFile = (file: File) => {
     if (file && ['image/jpeg', 'image/png'].includes(file.type)) {
       setSelectedFile(file);
 
@@ -50,13 +49,21 @@ function Upload() {
       reader.readAsDataURL(file);
       
       setDisabled(false);
+      setRecognizedDigit(null);
     } else {
       resetState();
       alert("Please select a valid JPG or PNG image.");
     }
+  }
+
+
+  // Handle file selection
+  const handleUpload = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    uploadFile(file!);
   };
 
-  // Handle submit file
+  // Handle submit form
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
 
@@ -75,26 +82,79 @@ function Upload() {
       });
   };
 
+  // Handle click file input
+  const handleClick = () => {
+    document.getElementById("fileInput")?.click()
+  };
+
+  // Handle drag and drop
+  const handleDragOver = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragOver(false);
+  };
+
+  const handleDrop = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setIsDragOver(false);
+    const file = event.dataTransfer.files[0];
+    uploadFile(file);
+  };
+
   return (
     <div>
       <div>
         <h1>Upload an Image (jpg/jpeg/png)</h1>
         <form onSubmit={handleSubmit}>
-          <input type="file" onChange={handleFileChange} accept=".jpg,.jpeg,.png" />
+          <div
+            onClick={handleClick}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+            style={{
+              width: "200px",
+              height: "200px",
+              border: "2px dashed #ccc",
+              borderRadius: "8px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              backgroundColor: isDragOver ? "#f0f0f0" : "white",
+            }}
+          >
+            {previewUrl ? (
+              <img
+                src={previewUrl}
+                alt="Preview"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "contain",
+                  imageRendering: "pixelated",
+                }}
+              />
+            ) : (
+              <p>Click or drag an image here</p>
+            )}
+
+            <input
+              id="fileInput"
+              type="file"
+              onChange={handleUpload}
+              accept=".jpg,.jpeg,.png"
+              style={{
+                display: "none"
+              }}
+            />
+          </div>
           <button type="submit" disabled={disabled}>recognize</button>
+          <button type="button" onClick={resetState}> clear</button>
         </form>
       </div>
-      <h3>how the app sees the image:</h3>
-      <img
-        src={previewUrl}
-        alt="Preview"
-        style={{
-          // TODO: move inline styles to css file
-          width: "200px",  // Display size
-          height: "200px", // Display size
-          imageRendering: "pixelated", // Keeps pixels sharp when upscaling
-        }}
-      />
       <h2>recognized digit: {recognizedDigit}</h2>
     </div>
   );
