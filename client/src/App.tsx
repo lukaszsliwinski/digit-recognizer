@@ -2,10 +2,21 @@ import { useState, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
 import './App.css';
 
+// TODO: turn alerts into custom snackbars
+
 function App() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | undefined>(undefined);
   const [recognizedDigit, setRecognizedDigit] = useState<number | null>(null);
+  const [disabled, setDisabled] = useState<boolean>(true);
+
+  // Reset app's state to initial values
+  const resetState = () => {
+    setSelectedFile(null);
+    setPreviewUrl(undefined);
+    setRecognizedDigit(null);
+    setDisabled(true);
+  }
 
   // Handle file selection
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -18,9 +29,6 @@ function App() {
       const reader = new FileReader();
       reader.onloadend = () => {
         const img = new Image();
-
-        console.log(typeof reader.result);
-
         img.src = reader.result as string;
         
         img.onload = () => {
@@ -29,7 +37,6 @@ function App() {
           canvas.width = 28;
           canvas.height = 28;
           const ctx = canvas.getContext('2d');
-          
           
           if (ctx) {
             // Draw the image on the canvas
@@ -41,10 +48,11 @@ function App() {
         }
       };
       reader.readAsDataURL(file);
+      
+      setDisabled(false);
     } else {
+      resetState();
       alert("Please select a valid JPG or PNG image.");
-      // TODO: keep button disabled and add snackbar when format is not valid
-
     }
   };
 
@@ -52,26 +60,19 @@ function App() {
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
 
-    if (!selectedFile) {
-      // TODO: disable button when there is no image
-      
-      alert('No file');
-      return;
-    }
-
-    // Create form data to send the image file
+    // Create form data to send the image file and prepare axios data
     const formData = new FormData();
-    formData.append('img', selectedFile);
+    formData.append('img', selectedFile!);
+    const headers = {'Content-Type': 'multipart/form-data'}
 
-    // Send POST request
-    try {
-      const response = await axios.post('/api/recognize', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+    // POST request
+    axios
+      .post('/api/recognize', formData, {headers: headers})
+      .then(response => setRecognizedDigit(response.data.recognized_digit))
+      .catch(() => {
+        resetState();
+        alert('Error uploading image, try again later!');
       });
-      setRecognizedDigit(response.data.recognized_digit);
-    } catch (error) {
-      console.error('Error uploading image:', error);
-    }
   };
 
   return (
@@ -80,7 +81,7 @@ function App() {
         <h1>Upload an Image (jpg/jpeg/png)</h1>
         <form onSubmit={handleSubmit}>
           <input type="file" onChange={handleFileChange} accept=".jpg,.jpeg,.png" />
-          <button type="submit">recognize</button>
+          <button type="submit" disabled={disabled}>recognize</button>
         </form>
       </div>
       <h3>how the app sees the image:</h3>
