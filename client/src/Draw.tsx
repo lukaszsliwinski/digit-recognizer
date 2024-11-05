@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import axios from 'axios';
 import './Draw.css';
 
 function Draw() {
@@ -15,7 +16,11 @@ function Draw() {
       if (ctxRef.current) {
         ctxRef.current.lineCap = 'round';
         ctxRef.current.strokeStyle = 'black';
-        ctxRef.current.lineWidth = 10;
+        ctxRef.current.lineWidth = 20;
+
+         // Fill the canvas with a white background
+         ctxRef.current.fillStyle = 'white';
+         ctxRef.current.fillRect(0, 0, canvasRef.current.width, canvasRef.current.height);
     }
     }
   }, []);
@@ -49,9 +54,36 @@ function Draw() {
     ctxRef?.current?.stroke();
   };
 
+
+  const recognize = async () => {
+    if (canvasRef.current) {
+      const dataURL = canvasRef.current.toDataURL('image/png');
+      const response = await fetch(dataURL);
+      const blob = await response.blob(); // Convert to Blob
+    
+      // Create form data to send the image file and prepare axios data
+      const formData = new FormData();
+      formData.append('img', blob, 'digit.png');
+      const headers = {'Content-Type': 'multipart/form-data'}
+
+      // POST request
+      axios
+        .post('/api/recognize', formData, {headers: headers})
+        .then(response => console.log(response.data.recognized_digit))
+        .catch(() => {
+          // resetState();
+          // alert('Error uploading image, try again later!');
+        });
+      }
+  }
+
   const clearCanvas = () => {
     if (ctxRef.current && canvasRef.current) {
         ctxRef.current.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+
+        // Redraw the white background after clearing
+        ctxRef.current.fillStyle = 'white';
+        ctxRef.current.fillRect(0, 0, canvasRef.current.width, canvasRef.current.height);
     }
   };
 
@@ -65,6 +97,7 @@ function Draw() {
         width={"280px"}
         height={"280px"}
       />
+      <button onClick={recognize}>recognize</button>
       <button onClick={clearCanvas}>clear</button>
     </div>
   );
