@@ -52,7 +52,7 @@ function Upload() {
       setRecognizedDigit(null);
     } else {
       resetState();
-      alert("Please select a valid JPG or PNG image.");
+      alert('Please select a valid JPG or PNG image.');
     }
   }
 
@@ -84,7 +84,7 @@ function Upload() {
 
   // Handle click file input
   const handleClick = () => {
-    document.getElementById("fileInput")?.click()
+    document.getElementById('fileInput')?.click()
   };
 
   // Handle drag and drop
