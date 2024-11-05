@@ -1,16 +1,11 @@
-.Draw {
-
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
-}
-
 .draw-area {
   width: 280px;
   height: 280px;
   border: 2px solid #808080;
-  position: relative;
   background-color: white;
+}
+
+.draw-area:hover {
+  cursor: crosshair;
+  /* cursor: url('path/pencil-cursor.png'), auto; TODO: Replace with pencil image */
 }

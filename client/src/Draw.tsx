@@ -5,6 +5,9 @@ import './Draw.css';
 function Draw() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
+  
+  const [recognizedDigit, setRecognizedDigit] = useState<number | null>(null);
+  const [disabled, setDisabled] = useState<boolean>(true);
   const [isDrawing, setIsDrawing] = useState(false);
 
   // Initialization when the component
@@ -18,15 +21,19 @@ function Draw() {
         ctxRef.current.strokeStyle = 'black';
         ctxRef.current.lineWidth = 20;
 
-         // Fill the canvas with a white background
-         ctxRef.current.fillStyle = 'white';
-         ctxRef.current.fillRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-    }
+        // Fill the canvas with a white background
+        ctxRef.current.fillStyle = 'white';
+        ctxRef.current.fillRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+      }
     }
   }, []);
 
   // Function for starting the drawing
   const startDrawing = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (disabled) {
+      setDisabled(false);
+    }
+
     ctxRef?.current?.beginPath();
     ctxRef?.current?.moveTo(
       e.nativeEvent.offsetX,
@@ -69,10 +76,10 @@ function Draw() {
       // POST request
       axios
         .post('/api/recognize', formData, {headers: headers})
-        .then(response => console.log(response.data.recognized_digit))
+        .then(response => setRecognizedDigit(response.data.recognized_digit))
         .catch(() => {
-          // resetState();
-          // alert('Error uploading image, try again later!');
+          alert('error');
+          clearCanvas();
         });
       }
   }
@@ -84,21 +91,28 @@ function Draw() {
         // Redraw the white background after clearing
         ctxRef.current.fillStyle = 'white';
         ctxRef.current.fillRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+
+        // disable recognize btn
+        setDisabled(true);
     }
   };
 
   return (
-    <div className="draw-area">
-      <canvas
-        onMouseDown={startDrawing}
-        onMouseUp={endDrawing}
-        onMouseMove={draw}
-        ref={canvasRef}
-        width={"280px"}
-        height={"280px"}
-      />
-      <button onClick={recognize}>recognize</button>
-      <button onClick={clearCanvas}>clear</button>
+    <div>
+      <h1>Draw a digit</h1>
+      <div className="draw-area">
+        <canvas
+          onMouseDown={startDrawing}
+          onMouseUp={endDrawing}
+          onMouseMove={draw}
+          ref={canvasRef}
+          width={"280px"}
+          height={"280px"}
+        />
+        <button onClick={recognize} disabled={disabled}>recognize</button>
+        <button onClick={clearCanvas}>clear</button>
+      </div>
+      <h2>recognized digit: {recognizedDigit}</h2>
     </div>
   );
 }

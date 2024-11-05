@@ -106,55 +106,53 @@ function Upload() {
 
   return (
     <div>
-      <div>
-        <h1>Upload an Image (jpg/jpeg/png)</h1>
-        <form onSubmit={handleSubmit}>
-          <div
-            onClick={handleClick}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-            style={{
-              width: "200px",
-              height: "200px",
-              border: "2px dashed #ccc",
-              borderRadius: "8px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: "pointer",
-              backgroundColor: isDragOver ? "#f0f0f0" : "white",
-            }}
-          >
-            {previewUrl ? (
-              <img
-                src={previewUrl}
-                alt="Preview"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "contain",
-                  imageRendering: "pixelated",
-                }}
-              />
-            ) : (
-              <p>Click or drag an image here</p>
-            )}
-
-            <input
-              id="fileInput"
-              type="file"
-              onChange={handleUpload}
-              accept=".jpg,.jpeg,.png"
+      <h1>Upload an Image (jpg/jpeg/png)</h1>
+      <form onSubmit={handleSubmit}>
+        <div
+          onClick={handleClick}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+          style={{
+            width: "200px",
+            height: "200px",
+            border: "2px dashed #ccc",
+            borderRadius: "8px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            cursor: "pointer",
+            backgroundColor: isDragOver ? "#f0f0f0" : "white",
+          }}
+        >
+          {previewUrl ? (
+            <img
+              src={previewUrl}
+              alt="Preview"
               style={{
-                display: "none"
+                width: "100%",
+                height: "100%",
+                objectFit: "contain",
+                imageRendering: "pixelated",
               }}
             />
-          </div>
-          <button type="submit" disabled={disabled}>recognize</button>
-          <button type="button" onClick={resetState}> clear</button>
-        </form>
-      </div>
+          ) : (
+            <p>Click or drag an image here</p>
+          )}
+
+          <input
+            id="fileInput"
+            type="file"
+            onChange={handleUpload}
+            accept=".jpg,.jpeg,.png"
+            style={{
+              display: "none"
+            }}
+          />
+        </div>
+        <button type="submit" disabled={disabled}>recognize</button>
+        <button type="button" onClick={resetState}> clear</button>
+      </form>
       <h2>recognized digit: {recognizedDigit}</h2>
     </div>
   );
