@@ -1,16 +1,38 @@
-from flask import Flask, request, jsonify
+# Imports
 import torch
-from torchvision import transforms
-from PIL import Image
-import PIL.ImageOps
 import io
+from flask import Flask, request, jsonify
+from torchvision import transforms
+from PIL import Image, ImageOps
 
 app = Flask(__name__, static_folder='client/build', static_url_path='/')
 
-@app.errorhandler(404)
-def not_found(e):
-    return app.send_static_file('index.html') # TODO: On the client side
 
+# Model initialization
+MODEL_PATH = 'trained_model.pt'
+model = torch.load(MODEL_PATH, weights_only=False)
+model.eval()
+
+
+# Function that converts an image to grayscale and tensor
+def transform_image(img_bytes):
+  # Convert image to grayscale
+  img = Image.open(io.BytesIO(img_bytes))
+  grayscale = img.convert('L')
+
+  # Invert colors
+  inverted_img = ImageOps.invert(grayscale)
+
+  # Define the transform to resize the image and convert to tensor
+  transform = transforms.Compose([
+    transforms.Resize((28, 28)),  # Resize to 28x28
+    transforms.ToTensor(),        # Convert to tensor and scale to [0, 1]
+  ])
+
+  return transform(inverted_img).view(1,1,28,28)
+
+
+# Render React app
 @app.route('/')
 def index():
   return app.send_static_file('index.html')
@@ -23,26 +45,9 @@ def recognize():
     
     img = request.files['img']
 
-    # Prepare model
-    model = torch.load("trained_model.pt", weights_only=False)
-    model.eval()
-
-    # Read the image into memory and convert to grayscale
+    # Read the image into memory and transform to tensor
     img_bytes = img.read()
-    img = Image.open(io.BytesIO(img_bytes))
-    grayscale = img.convert('L')
-
-    # Invert colors
-    inverted_img = PIL.ImageOps.invert(grayscale)
-
-    # Define the transform to resize the image and convert to tensor
-    transform = transforms.Compose([
-      transforms.Resize((28, 28)),  # Resize to 28x28
-      transforms.ToTensor(),        # Convert to tensor and scale to [0, 1]
-    ])
-
-    # Apply the transform
-    img_tensor = transform(inverted_img).view(1,1,28,28)
+    img_tensor = transform_image(img_bytes)
 
     # Predict digit
     with torch.no_grad():
