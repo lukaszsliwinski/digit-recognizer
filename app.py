@@ -43,18 +43,21 @@ def recognize():
     if 'img' not in request.files:
       return jsonify({"error": "No image file in request"}), 400
     
-    img = request.files['img']
+    try:
+      img = request.files['img']
 
-    # Read the image into memory and transform to tensor
-    img_bytes = img.read()
-    img_tensor = transform_image(img_bytes)
+      # Read the image into memory and transform to tensor
+      img_bytes = img.read()
+      img_tensor = transform_image(img_bytes)
 
-    # Predict digit
-    with torch.no_grad():
-      prediction = model(img_tensor.view(1,1,28,28))
+      # Predict digit
+      with torch.no_grad():
+        prediction = model(img_tensor.view(1,1,28,28))
 
-    # Return recognized digit
-    return {'recognized_digit': prediction[0].argmax().item()}
+      # Return recognized digit
+      return jsonify({'recognized_digit': prediction[0].argmax().item()}), 200
+    except Exception as e:
+      return jsonify({"error": f"Failed to process the image: {str(e)}"}), 500
 
 if __name__ == '__main__':
   app.run(host='0.0.0.0')
