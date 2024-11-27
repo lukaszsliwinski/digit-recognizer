@@ -8,7 +8,7 @@ from app.cnn_structure import DigitRecognitionModel
 
 app = Flask(__name__, static_folder='client/build', static_url_path='/')
 
-MODEL_PATH = 'models/trained_model.pt'
+MODEL_PATH = 'model/trained_model.pt'
 
 # Model initialization
 model = DigitRecognitionModel()
