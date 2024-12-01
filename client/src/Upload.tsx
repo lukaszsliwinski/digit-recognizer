@@ -1,6 +1,9 @@
 import { useState, ChangeEvent, FormEvent, DragEvent } from 'react';
 import axios from 'axios';
-import './App.css';
+
+import Header from './components/Header';
+import Button from './components/Button';
+import Result from './components/Result';
 
 // TODO: turn alerts into custom snackbars
 
@@ -106,54 +109,40 @@ function Upload() {
 
   return (
     <div>
-      <h1>Upload an Image (jpg/jpeg/png)</h1>
+      <Header text={'Upload an image'} />
       <form onSubmit={handleSubmit}>
         <div
           onClick={handleClick}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
-          style={{
-            width: "200px",
-            height: "200px",
-            border: "2px dashed #ccc",
-            borderRadius: "8px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            cursor: "pointer",
-            backgroundColor: isDragOver ? "#f0f0f0" : "white",
-          }}
+          className={`${isDragOver ? 'bg-[#f0f0f0]' : 'bg-white'} flex justify-center items-center w-80 h-80 border-2 border-dashed border-gray-400 rounded hover:cursor-pointer`}
         >
           {previewUrl ? (
             <img
+              id="preview"
               src={previewUrl}
               alt="Preview"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "contain",
-                imageRendering: "pixelated",
-              }}
+              className="w-full h-full object-contain"
             />
           ) : (
-            <p>Click or drag an image here</p>
+            <p className="text-center text-gray-400">Click or drag an image here<br />(jpg/jpeg/png)</p>
           )}
 
           <input
             id="fileInput"
+            className="hidden"
             type="file"
             onChange={handleUpload}
             accept=".jpg,.jpeg,.png"
-            style={{
-              display: "none"
-            }}
           />
         </div>
-        <button type="submit" disabled={disabled}>recognize</button>
-        <button type="button" onClick={resetState}> clear</button>
+        <div className="flex justify-center">
+          <Button type="submit" click={undefined} disabled={disabled} text={'recognize'} />
+          <Button type="button" click={resetState} disabled={undefined} text={'clear'} />
+        </div>
       </form>
-      <h2>recognized digit: {recognizedDigit}</h2>
+      <Result result={recognizedDigit?.toString()} />
     </div>
   );
 }

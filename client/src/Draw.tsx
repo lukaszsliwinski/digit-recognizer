@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
-import './Draw.css';
+
+import Header from './components/Header';
+import Button from './components/Button';
+import Result from './components/Result';
 
 function Draw() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -99,22 +102,22 @@ function Draw() {
   };
 
   return (
-    <div>
-      <h1>Draw a digit</h1>
-      <div className="draw-area">
-        <canvas
-          onMouseDown={startDrawing}
-          onMouseUp={endDrawing}
-          onMouseMove={draw}
-          ref={canvasRef}
-          width={"280px"}
-          height={"280px"}
-        />
-        <button onClick={recognize} disabled={disabled}>recognize</button>
-        <button onClick={clearCanvas}>clear</button>
+    <section>
+      <Header text={'Draw a digit'} />
+      {/* TODO: cursor pencil */}
+      <canvas
+        className="border border-black w-80 h-80 hover:cursor-crosshair"
+        onMouseDown={startDrawing}
+        onMouseUp={endDrawing}
+        onMouseMove={draw}
+        ref={canvasRef}
+      />
+      <div className="flex justify-center ">
+        <Button type="button" click={recognize} disabled={disabled} text={'recognize'} />
+        <Button type="button" click={clearCanvas} disabled={undefined} text={'clear'} />
       </div>
-      <h2>recognized digit: {recognizedDigit}</h2>
-    </div>
+      <Result result={recognizedDigit?.toString()} />
+    </section>
   );
 }
 

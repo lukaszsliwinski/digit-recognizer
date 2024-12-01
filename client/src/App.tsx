@@ -3,10 +3,10 @@ import Draw from './Draw';
 
 function App() {
   return (
-    <>
+    <div className="flex w-100 justify-around min-h-screen items-center">
       <Upload />
       <Draw />
-    </>
+    </div>
   );
 }
 
