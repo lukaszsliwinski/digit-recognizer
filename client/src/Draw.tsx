@@ -106,11 +106,13 @@ function Draw() {
       <Header text={'Draw a digit'} />
       {/* TODO: cursor pencil */}
       <canvas
-        className="border border-black w-80 h-80 hover:cursor-crosshair"
+        className="border-2 border-gray-400 rounded w-80 h-80 hover:cursor-crosshair"
         onMouseDown={startDrawing}
         onMouseUp={endDrawing}
         onMouseMove={draw}
         ref={canvasRef}
+        width="320"
+        height="320"
       />
       <div className="flex justify-center ">
         <Button type="button" click={recognize} disabled={disabled} text={'recognize'} />
