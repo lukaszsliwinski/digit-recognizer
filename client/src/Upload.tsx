@@ -11,6 +11,7 @@ function Upload() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | undefined>(undefined);
   const [recognizedDigit, setRecognizedDigit] = useState<number | null>(null);
+  const [confidence, setConfidence] = useState<string | null>(null);
   const [disabled, setDisabled] = useState<boolean>(true);
   const [isDragOver, setIsDragOver] = useState<boolean>(false);
 
@@ -19,6 +20,7 @@ function Upload() {
     setSelectedFile(null);
     setPreviewUrl(undefined);
     setRecognizedDigit(null);
+    setConfidence(null);
     setDisabled(true);
   }
 
@@ -78,7 +80,10 @@ function Upload() {
     // POST request
     axios
       .post('/api/recognize', formData, {headers: headers})
-      .then(response => setRecognizedDigit(response.data.recognized_digit))
+      .then(response => {
+        setRecognizedDigit(response.data.recognized_digit);
+        setConfidence(response.data.confidence);
+      })
       .catch(() => {
         resetState();
         alert('Error uploading image, try again later!');
@@ -142,7 +147,7 @@ function Upload() {
           <Button type="button" click={resetState} disabled={undefined} text={'clear'} />
         </div>
       </form>
-      <Result result={recognizedDigit?.toString()} />
+      <Result result={recognizedDigit?.toString()} confidence={confidence!} />
     </div>
   );
 }

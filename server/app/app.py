@@ -1,5 +1,6 @@
 # Imports
 import torch
+import torch.nn.functional as F
 import io
 from flask import Flask, request, jsonify
 from torchvision import transforms
@@ -43,7 +44,7 @@ def index():
 @app.route('/api/recognize', methods=['POST'])
 def recognize():
   """
-  Process the uploaded image, run it through the model, and return the predicted digit.
+  Process the uploaded image, run it through the model, and return the predicted digit with its confidence.
   """
   if request.method == 'POST':
     if 'img' not in request.files:
@@ -53,9 +54,19 @@ def recognize():
       img = request.files['img']
       img_bytes = img.read()
       img_tensor = transform_image(img_bytes)
+      
       with torch.no_grad():
-        prediction = model(img_tensor.view(1,1,28,28))
-      return jsonify({'recognized_digit': prediction[0].argmax().item()}), 200
+        logits = model(img_tensor.view(1, 1, 28, 28))
+        probabilities = F.softmax(logits, dim=1)
+
+      prediction = probabilities.argmax(dim=1).item()
+      confidence = probabilities[0, prediction].item()
+      
+      return jsonify({
+        'recognized_digit': prediction,
+        'confidence': f"{confidence * 100:.2f}%"
+      }), 200
+    
     except Exception as e:
       return jsonify({"error": f"Failed to process the image: {str(e)}"}), 500
 

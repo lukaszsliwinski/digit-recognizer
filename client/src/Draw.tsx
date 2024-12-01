@@ -10,6 +10,7 @@ function Draw() {
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
   
   const [recognizedDigit, setRecognizedDigit] = useState<number | null>(null);
+  const [confidence, setConfidence] = useState<string | null>(null);
   const [disabled, setDisabled] = useState<boolean>(true);
   const [isDrawing, setIsDrawing] = useState(false);
 
@@ -79,15 +80,18 @@ function Draw() {
       // POST request
       axios
         .post('/api/recognize', formData, {headers: headers})
-        .then(response => setRecognizedDigit(response.data.recognized_digit))
+        .then(response => {
+          setRecognizedDigit(response.data.recognized_digit);
+          setConfidence(response.data.confidence);
+        })
         .catch(() => {
           alert('error');
-          clearCanvas();
+          resetState();
         });
       }
   }
 
-  const clearCanvas = () => {
+  const resetState = () => {
     if (ctxRef.current && canvasRef.current) {
         ctxRef.current.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
 
@@ -98,6 +102,7 @@ function Draw() {
         // disable recognize btn
         setDisabled(true);
         setRecognizedDigit(null);
+        setConfidence(null);
     }
   };
 
@@ -116,9 +121,9 @@ function Draw() {
       />
       <div className="flex justify-center ">
         <Button type="button" click={recognize} disabled={disabled} text={'recognize'} />
-        <Button type="button" click={clearCanvas} disabled={undefined} text={'clear'} />
+        <Button type="button" click={resetState} disabled={undefined} text={'clear'} />
       </div>
-      <Result result={recognizedDigit?.toString()} />
+      <Result result={recognizedDigit?.toString()} confidence={confidence!} />
     </section>
   );
 }
