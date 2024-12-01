@@ -94,6 +94,7 @@ function Draw() {
 
         // disable recognize btn
         setDisabled(true);
+        setRecognizedDigit(null);
     }
   };
 
