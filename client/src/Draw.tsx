@@ -107,7 +107,7 @@ function Draw() {
   };
 
   return (
-    <section>
+    <section className="flex flex-col justify-evenly items-center bg-white w-[460px] h-[620px] rounded-xl shadow-xl">
       <Header text={'Draw a digit'} />
       {/* TODO: cursor pencil */}
       <canvas
@@ -120,8 +120,8 @@ function Draw() {
         height="320"
       />
       <div className="flex justify-center ">
-        <Button type="button" click={recognize} disabled={disabled} text={'recognize'} />
-        <Button type="button" click={resetState} disabled={undefined} text={'clear'} />
+        <Button type="button" click={recognize} disabled={disabled} text={'RECOGNIZE'} />
+        <Button type="button" click={resetState} disabled={undefined} text={'CLEAR'} />
       </div>
       <Result result={recognizedDigit?.toString()} confidence={confidence!} />
     </section>

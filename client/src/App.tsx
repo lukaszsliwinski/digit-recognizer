@@ -3,10 +3,12 @@ import Draw from './Draw';
 
 function App() {
   return (
-    <div className="flex w-100 justify-around min-h-screen items-center">
-      <Upload />
-      <Draw />
-    </div>
+    <main className="flex justify-center items-center w-screen h-screen bg-background">
+      <div className="flex justify-evenly items-center w-screen h-[80vh] bg-white/10 backdrop-blur-lg shadow-xl">
+        <Upload />
+        <Draw />
+      </div>
+    </main>
   );
 }
 

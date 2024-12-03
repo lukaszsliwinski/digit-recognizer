@@ -1,6 +1,9 @@
 import { useState, ChangeEvent, FormEvent, DragEvent } from 'react';
 import axios from 'axios';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCloudArrowUp } from '@fortawesome/free-solid-svg-icons'
+
 import Header from './components/Header';
 import Button from './components/Button';
 import Result from './components/Result';
@@ -113,7 +116,7 @@ function Upload() {
   };
 
   return (
-    <div>
+    <section className="flex flex-col justify-evenly items-center bg-white w-[460px] h-[620px] rounded-xl shadow-xl">
       <Header text={'Upload an image'} />
       <form onSubmit={handleSubmit}>
         <div
@@ -131,7 +134,10 @@ function Upload() {
               className="w-full h-full object-contain"
             />
           ) : (
-            <p className="text-center text-gray-400">Click or drag an image here<br />(jpg/jpeg/png)</p>
+            <div className="text-center text-gray-400">
+              <FontAwesomeIcon icon={faCloudArrowUp} size="3x" />
+              <p>Click or drag an image here<br />(jpg/jpeg/png)</p>
+            </div>
           )}
 
           <input
@@ -142,13 +148,13 @@ function Upload() {
             accept=".jpg,.jpeg,.png"
           />
         </div>
-        <div className="flex justify-center">
-          <Button type="submit" click={undefined} disabled={disabled} text={'recognize'} />
-          <Button type="button" click={resetState} disabled={undefined} text={'clear'} />
+        <div className="flex justify-center mt-8">
+          <Button type="submit" click={undefined} disabled={disabled} text={'RECOGNIZE'} />
+          <Button type="button" click={resetState} disabled={undefined} text={'CLEAR'} />
         </div>
       </form>
       <Result result={recognizedDigit?.toString()} confidence={confidence!} />
-    </div>
+    </section>
   );
 }
 

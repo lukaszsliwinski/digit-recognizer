@@ -64,7 +64,7 @@ def recognize():
       
       return jsonify({
         'recognized_digit': prediction,
-        'confidence': f"{confidence * 100:.2f}%"
+        'confidence': round(confidence*100)
       }), 200
     
     except Exception as e:
