@@ -107,7 +107,7 @@ function Draw() {
   };
 
   return (
-    <section className="flex flex-col justify-evenly items-center bg-white w-[460px] h-[620px] rounded-xl shadow-xl">
+    <section className="flex flex-col justify-evenly items-center bg-neutral-50 w-[460px] h-[620px] rounded-xl shadow-xl">
       <Header text={'Draw a digit'} />
       {/* TODO: cursor pencil */}
       <canvas

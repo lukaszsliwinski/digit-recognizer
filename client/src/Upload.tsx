@@ -116,7 +116,7 @@ function Upload() {
   };
 
   return (
-    <section className="flex flex-col justify-evenly items-center bg-white w-[460px] h-[620px] rounded-xl shadow-xl">
+    <section className="flex flex-col justify-evenly items-center bg-neutral-50 w-[460px] h-[620px] rounded-xl shadow-xl">
       <Header text={'Upload an image'} />
       <form onSubmit={handleSubmit}>
         <div
@@ -124,7 +124,7 @@ function Upload() {
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
-          className={`${isDragOver ? 'bg-[#f0f0f0]' : 'bg-white'} flex justify-center items-center w-80 h-80 border-2 border-dashed border-gray-400 rounded hover:cursor-pointer`}
+          className={`${isDragOver ? 'bg-white text-gray-300' : 'bg-neutral-50 text-gray-400'} flex justify-center items-center w-80 h-80 border-2 border-dashed border-gray-400 rounded hover:cursor-pointer hover:text-gray-300`}
         >
           {previewUrl ? (
             <img
@@ -134,7 +134,7 @@ function Upload() {
               className="w-full h-full object-contain"
             />
           ) : (
-            <div className="text-center text-gray-400">
+            <div className="text-center">
               <FontAwesomeIcon icon={faCloudArrowUp} size="3x" />
               <p>Click or drag an image here<br />(jpg/jpeg/png)</p>
             </div>

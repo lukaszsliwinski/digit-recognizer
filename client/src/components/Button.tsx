@@ -8,7 +8,7 @@ interface IButton {
 function Button({ type, click, disabled, text }: IButton) {
   return (
     <button
-      className="w-32 h-12 m-2 text-sm rounded-xl enabled:shadow-lg bg-indigo-700 font-semibold text-white enabled:hover:cursor-pointer enabled:hover:shadow-none disabled:opacity-50"
+      className="w-32 h-12 m-2 text-sm rounded-xl enabled:shadow-lg bg-cyan-800 font-semibold text-neutral-50 enabled:hover:cursor-pointer enabled:hover:opacity-95 enabled:hover:shadow-none disabled:opacity-50 transition-all"
       type={type}
       onClick={click}
       disabled={disabled}
