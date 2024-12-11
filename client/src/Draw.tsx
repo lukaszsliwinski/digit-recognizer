@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 
+import useWindowDimensions from './hooks/useWindowDimensions';
+
 import Header from './components/Header';
 import Button from './components/Button';
 import Result from './components/Result';
@@ -14,23 +16,38 @@ function Draw() {
   const [disabled, setDisabled] = useState<boolean>(true);
   const [isDrawing, setIsDrawing] = useState(false);
 
+  const { screenHeight, screenWidth } = useWindowDimensions();
+
   // Initialization when the component
   // mounts for the first time
   useEffect(() => {
     if (canvasRef.current) {
       ctxRef.current = canvasRef.current.getContext('2d');
+      const canvas = canvasRef.current;
         
-      if (ctxRef.current) {
+      if (ctxRef.current && screenWidth) {
+        // set canvas dimenstions based on the screen width
+        if (screenWidth >= 480) {
+          canvas.width = 320;
+          canvas.height = 320;
+        } else if (screenWidth < 480 && screenWidth >= 360) {
+          canvas.width = 256;
+          canvas.height = 256;
+        } else {
+          canvas.width = 224;
+          canvas.height = 224;
+        };
+
         ctxRef.current.lineCap = 'round';
         ctxRef.current.strokeStyle = 'black';
         ctxRef.current.lineWidth = 20;
-
+  
         // Fill the canvas with a white background
         ctxRef.current.fillStyle = 'white';
         ctxRef.current.fillRect(0, 0, canvasRef.current.width, canvasRef.current.height);
       }
     }
-  }, []);
+  }, [screenWidth]);
 
   // Function for starting the drawing
   const startDrawing = (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -107,21 +124,20 @@ function Draw() {
   };
 
   return (
-    <section className="flex flex-col justify-evenly items-center bg-neutral-50 w-[460px] h-[620px] rounded-xl shadow-xl">
+    <section className="flex flex-col justify-evenly items-center bg-neutral-50 w-full sm:w-[460px] h-[620px] rounded-xl shadow-xl mt-1 xs:mt-4 lg:mt-0">
       <Header text={'Draw a digit'} />
-      {/* TODO: cursor pencil */}
-      <canvas
-        className="border-2 border-gray-400 rounded w-80 h-80 hover:cursor-crosshair"
-        onMouseDown={startDrawing}
-        onMouseUp={endDrawing}
-        onMouseMove={draw}
-        ref={canvasRef}
-        width="320"
-        height="320"
-      />
-      <div className="flex justify-center ">
-        <Button type="button" click={recognize} disabled={disabled} text={'RECOGNIZE'} />
-        <Button type="button" click={resetState} disabled={undefined} text={'CLEAR'} />
+      <div className="flex flex-col items-center">
+        <canvas
+          className="border-2 border-gray-400 rounded w-56 xxs:w-64 xs:w-80 h-56 xxs:h-64 xs:h-80 hover:cursor-crosshair"
+          onMouseDown={startDrawing}
+          onMouseUp={endDrawing}
+          onMouseMove={draw}
+          ref={canvasRef}
+        />
+        <div className="flex justify-center items-center flex-col xxs:flex-row mt-4">
+          <Button type="button" click={recognize} disabled={disabled} text={'RECOGNIZE'} />
+          <Button type="button" click={resetState} disabled={undefined} text={'CLEAR'} />
+        </div>
       </div>
       <Result result={recognizedDigit?.toString()} confidence={confidence!} />
     </section>

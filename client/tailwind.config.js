@@ -5,8 +5,12 @@ module.exports = {
   ],
   theme: {
     extend: {
-        backgroundImage: {
-          'background': 'url("./assets/background.webp")',
+      screens: {
+        xxs: '360px',
+        xs: '480px',
+      },
+      backgroundImage: {
+        'background': 'url("./assets/background.webp")',
       },
     },
   },

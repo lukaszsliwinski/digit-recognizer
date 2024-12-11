@@ -26,7 +26,7 @@ function Result({ result, confidence } : IResult) {
   }, [confidence]);
   
   return (
-    <div className="grid grid-cols-2 gap-x-16 font-semibold">      
+    <div className="grid grid-cols-2 gap-x-8 xxs:gap-x-16 font-semibold">      
       <ProgressCircle percent={percent} />
       <div className="w-20 h-20 shadow rounded-full text-center text-[56px] leading-[76px]">{result}</div>
       <div className="mt-2 text-xs text-center">CONFIDENCE</div>

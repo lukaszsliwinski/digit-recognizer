@@ -116,15 +116,15 @@ function Upload() {
   };
 
   return (
-    <section className="flex flex-col justify-evenly items-center bg-neutral-50 w-[460px] h-[620px] rounded-xl shadow-xl">
+    <section className="flex flex-col justify-evenly items-center bg-neutral-50 w-full sm:w-[460px] h-[620px] rounded-xl shadow-xl mb-1 xs:mb-4 lg:mb-0">
       <Header text={'Upload an image'} />
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="flex flex-col items-center">
         <div
           onClick={handleClick}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
-          className={`${isDragOver ? 'bg-white text-gray-300' : 'bg-neutral-50 text-gray-400'} flex justify-center items-center w-80 h-80 border-2 border-dashed border-gray-400 rounded hover:cursor-pointer hover:text-gray-300`}
+          className={`${isDragOver ? 'bg-white text-gray-300' : 'bg-neutral-50 text-gray-400'} flex justify-center items-center w-56 xxs:w-64 xs:w-80 h-56 xxs:h-64 xs:h-80 border-2 border-dashed border-gray-400 rounded hover:cursor-pointer hover:text-gray-300`}
         >
           {previewUrl ? (
             <img
@@ -148,7 +148,7 @@ function Upload() {
             accept=".jpg,.jpeg,.png"
           />
         </div>
-        <div className="flex justify-center mt-8">
+        <div className="flex justify-center items-center flex-col xxs:flex-row mt-4">
           <Button type="submit" click={undefined} disabled={disabled} text={'RECOGNIZE'} />
           <Button type="button" click={resetState} disabled={undefined} text={'CLEAR'} />
         </div>
