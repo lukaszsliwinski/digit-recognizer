@@ -7,7 +7,7 @@ from torchvision import transforms
 from PIL import Image, ImageOps
 from app.cnn_structure import DigitRecognitionModel
 
-app = Flask(__name__, static_folder='client/build', static_url_path='/')
+app = Flask(__name__, static_folder='../../client/build', static_url_path='/')
 
 MODEL_PATH = 'model/trained_model.pt'
 
