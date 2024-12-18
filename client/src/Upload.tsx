@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, FormEvent, DragEvent } from 'react';
+import { useState, useRef, ChangeEvent, FormEvent, DragEvent } from 'react';
 import axios from 'axios';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -18,6 +18,8 @@ function Upload() {
   const [disabled, setDisabled] = useState<boolean>(true);
   const [isDragOver, setIsDragOver] = useState<boolean>(false);
 
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
   // Reset app's state to initial values
   const resetState = () => {
     setSelectedFile(null);
@@ -25,6 +27,10 @@ function Upload() {
     setRecognizedDigit(null);
     setConfidence(null);
     setDisabled(true);
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   }
 
   // Upload file
@@ -93,10 +99,6 @@ function Upload() {
       });
   };
 
-  // Handle click file input
-  const handleClick = () => {
-    document.getElementById('fileInput')?.click()
-  };
 
   // Handle drag and drop
   const handleDragOver = (event: DragEvent<HTMLDivElement>) => {
@@ -120,7 +122,7 @@ function Upload() {
       <Header text={'Upload an image'} />
       <form onSubmit={handleSubmit} className="flex flex-col items-center">
         <div
-          onClick={handleClick}
+          onClick={() => fileInputRef.current?.click()}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
@@ -141,7 +143,7 @@ function Upload() {
           )}
 
           <input
-            id="fileInput"
+            ref={fileInputRef}
             className="hidden"
             type="file"
             onChange={handleUpload}
