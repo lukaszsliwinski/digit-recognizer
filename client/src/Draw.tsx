@@ -107,7 +107,6 @@ function Draw() {
 
   // Touch event handlers
   const handleTouchStart = (e: React.TouchEvent<HTMLCanvasElement>) => {
-    e.preventDefault();
     const rect = canvasRef.current?.getBoundingClientRect();
     const touch = e.touches[0];
     if (rect) {
@@ -118,7 +117,6 @@ function Draw() {
   };
   
   const handleTouchMove = (e: React.TouchEvent<HTMLCanvasElement>) => {
-    e.preventDefault();
     const rect = canvasRef.current?.getBoundingClientRect();
     const touch = e.touches[0];
     if (rect) {
@@ -129,7 +127,6 @@ function Draw() {
   };
   
   const handleTouchEnd = (e: React.TouchEvent<HTMLCanvasElement>) => {
-    e.preventDefault();
     endDrawing();
   };
 

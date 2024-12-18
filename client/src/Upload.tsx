@@ -96,7 +96,7 @@ function Upload() {
 
     // POST request
     axios
-      .post('/api/recogniz', formData, {headers: headers})
+      .post('/api/recognize', formData, {headers: headers})
       .then(response => {
         setRecognizedDigit(response.data.recognized_digit);
         setConfidence(response.data.confidence);
