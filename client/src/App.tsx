@@ -1,7 +1,7 @@
 import { AlertProvider } from './context/AlertContext';
 
-import Upload from './Upload';
-import Draw from './Draw';
+import Upload from './components/Upload';
+import Draw from './components/Draw';
 
 function App() {
   return (

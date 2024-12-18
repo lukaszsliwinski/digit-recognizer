@@ -4,11 +4,11 @@ import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCloudArrowUp } from '@fortawesome/free-solid-svg-icons'
 
-import { useAlert } from './context/AlertContext';
+import { useAlert } from '../context/AlertContext';
 
-import Header from './components/Header';
-import Button from './components/Button';
-import Result from './components/Result';
+import Header from './Header';
+import Button from './Button';
+import Result from './Result';
 
 function Upload() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);

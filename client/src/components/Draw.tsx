@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 
-import useWindowDimensions from './hooks/useWindowDimensions';
-import { useAlert } from './context/AlertContext';
+import useWindowDimensions from '../hooks/useWindowDimensions';
+import { useAlert } from '../context/AlertContext';
 
-import Header from './components/Header';
-import Button from './components/Button';
-import Result from './components/Result';
+import Header from './Header';
+import Button from './Button';
+import Result from './Result';
 
 function Draw() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -144,7 +144,7 @@ function Draw() {
 
       // POST request
       axios
-        .post('/api/recogniz', formData, {headers: headers})
+        .post('/api/recognize', formData, {headers: headers})
         .then(response => {
           setRecognizedDigit(response.data.recognized_digit);
           setConfidence(response.data.confidence);
