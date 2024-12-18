@@ -38,14 +38,13 @@ function Upload() {
     if (file && ['image/jpeg', 'image/png'].includes(file.type)) {
       setSelectedFile(file);
 
-      // Resize the image to 28x28px
       const reader = new FileReader();
       reader.onloadend = () => {
         const img = new Image();
         img.src = reader.result as string;
         
         img.onload = () => {
-          // Use canvas to resize the image
+          // Use canvas to resize the image to 28x28px
           const canvas = document.createElement('canvas');
           canvas.width = 28;
           canvas.height = 28;
@@ -55,8 +54,15 @@ function Upload() {
             // Draw the image on the canvas
             ctx.drawImage(img, 0, 0, 28, 28);
             
-            // Convert the canvas to a data url and set as the preview
-            setPreviewUrl(canvas.toDataURL('image/png'));
+            // Convert the canvas to Blob
+            canvas.toBlob((blob) => {
+              if (blob) {
+                const resizedFile = new File([blob], file.name, { type: 'image/png' });
+                setSelectedFile(resizedFile);
+                setPreviewUrl(canvas.toDataURL('image/png'));
+                setDisabled(false);
+              }
+            }, 'image/png');  
           }
         }
       };
