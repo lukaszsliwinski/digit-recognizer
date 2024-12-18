@@ -49,17 +49,28 @@ function Draw() {
     }
   }, [screenWidth]);
 
-  // Function for starting the drawing
-  const startDrawing = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  // Prevent agains page scrolling when draw a digit on canvas on mobile
+  useEffect(() => {
+    const preventTouchScroll = (e: TouchEvent) => {
+      if (canvasRef.current && canvasRef.current.contains(e.target as Node)) {
+        e.preventDefault();
+      }
+    };
+    document.addEventListener('touchmove', preventTouchScroll, { passive: false });
+  
+    return () => {
+      document.removeEventListener('touchmove', preventTouchScroll);
+    };
+  }, []);
+
+  // Start, end and draw functions
+  const startDrawing = (x: number, y: number) => {
     if (disabled) {
       setDisabled(false);
     }
 
     ctxRef?.current?.beginPath();
-    ctxRef?.current?.moveTo(
-      e.nativeEvent.offsetX,
-      e.nativeEvent.offsetY
-    );
+    ctxRef?.current?.moveTo(x, y);
     setIsDrawing(true);
   };
 
@@ -69,17 +80,55 @@ function Draw() {
     setIsDrawing(false);
   };
 
-  const draw = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  const draw = (x: number, y: number) => {
     if (!isDrawing) {
       return;
     }
 
-    ctxRef?.current?.lineTo(
-      e.nativeEvent.offsetX,
-      e.nativeEvent.offsetY
-    );
-
+    ctxRef?.current?.lineTo(x, y);
     ctxRef?.current?.stroke();
+  };
+
+
+  // Mouse event handlers
+  const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    startDrawing(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    draw(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
+  };
+
+  const handleMouseUp = () => {
+    endDrawing();
+  };
+
+  // Touch event handlers
+  const handleTouchStart = (e: React.TouchEvent<HTMLCanvasElement>) => {
+    e.preventDefault();
+    const rect = canvasRef.current?.getBoundingClientRect();
+    const touch = e.touches[0];
+    if (rect) {
+      const x = touch.clientX - rect.left;
+      const y = touch.clientY - rect.top;
+      startDrawing(x, y);
+    }
+  };
+  
+  const handleTouchMove = (e: React.TouchEvent<HTMLCanvasElement>) => {
+    e.preventDefault();
+    const rect = canvasRef.current?.getBoundingClientRect();
+    const touch = e.touches[0];
+    if (rect) {
+      const x = touch.clientX - rect.left;
+      const y = touch.clientY - rect.top;
+      draw(x, y);
+    }
+  };
+  
+  const handleTouchEnd = (e: React.TouchEvent<HTMLCanvasElement>) => {
+    e.preventDefault();
+    endDrawing();
   };
 
 
@@ -129,9 +178,12 @@ function Draw() {
       <div className="flex flex-col items-center">
         <canvas
           className="border-2 border-gray-400 rounded w-56 xxs:w-64 xs:w-80 h-56 xxs:h-64 xs:h-80 hover:cursor-crosshair"
-          onMouseDown={startDrawing}
-          onMouseUp={endDrawing}
-          onMouseMove={draw}
+          onMouseDown={handleMouseDown}
+          onMouseUp={handleMouseUp}
+          onMouseMove={handleMouseMove}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
           ref={canvasRef}
         />
         <div className="flex justify-center items-center flex-col xxs:flex-row mt-4">
