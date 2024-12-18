@@ -27,6 +27,7 @@ def transform_image(img_bytes):
   grayscale = img.convert('L')
   inverted_img = ImageOps.invert(grayscale)
   transform = transforms.Compose([
+    transforms.Resize((28, 28)),
     transforms.ToTensor(),
   ])
   return transform(inverted_img).view(1,1,28,28)
