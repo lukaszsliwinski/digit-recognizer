@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 
 import useWindowDimensions from './hooks/useWindowDimensions';
+import { useAlert } from './context/AlertContext';
 
 import Header from './components/Header';
 import Button from './components/Button';
@@ -16,10 +17,11 @@ function Draw() {
   const [disabled, setDisabled] = useState<boolean>(true);
   const [isDrawing, setIsDrawing] = useState(false);
 
+  const { showAlert } = useAlert();
+
   const { screenHeight, screenWidth } = useWindowDimensions();
 
-  // Initialization when the component
-  // mounts for the first time
+  // Initialization when the component mounts for the first time
   useEffect(() => {
     if (canvasRef.current) {
       ctxRef.current = canvasRef.current.getContext('2d');
@@ -145,13 +147,13 @@ function Draw() {
 
       // POST request
       axios
-        .post('/api/recognize', formData, {headers: headers})
+        .post('/api/recogniz', formData, {headers: headers})
         .then(response => {
           setRecognizedDigit(response.data.recognized_digit);
           setConfidence(response.data.confidence);
         })
         .catch(() => {
-          alert('error');
+          showAlert('Server error, try again later!');
           resetState();
         });
       }

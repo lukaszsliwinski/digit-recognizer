@@ -4,11 +4,11 @@ import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCloudArrowUp } from '@fortawesome/free-solid-svg-icons'
 
+import { useAlert } from './context/AlertContext';
+
 import Header from './components/Header';
 import Button from './components/Button';
 import Result from './components/Result';
-
-// TODO: turn alerts into custom snackbars
 
 function Upload() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -19,6 +19,8 @@ function Upload() {
   const [isDragOver, setIsDragOver] = useState<boolean>(false);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const { showAlert } = useAlert();
 
   // Reset app's state to initial values
   const resetState = () => {
@@ -72,7 +74,7 @@ function Upload() {
       setRecognizedDigit(null);
     } else {
       resetState();
-      alert('Please select a valid JPG or PNG image.');
+      showAlert('Please select a valid JPG or PNG image.');
     }
   }
 
@@ -94,14 +96,14 @@ function Upload() {
 
     // POST request
     axios
-      .post('/api/recognize', formData, {headers: headers})
+      .post('/api/recogniz', formData, {headers: headers})
       .then(response => {
         setRecognizedDigit(response.data.recognized_digit);
         setConfidence(response.data.confidence);
       })
       .catch(() => {
         resetState();
-        alert('Error uploading image, try again later!');
+        showAlert('Error uploading image, try again later!');
       });
   };
 
