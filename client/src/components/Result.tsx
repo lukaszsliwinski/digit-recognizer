@@ -2,15 +2,18 @@ import { useEffect, useState } from "react";
 
 import ProgressCircle from './ProgressCircle';
 
+// Props
 interface IResult {
   result: string | undefined,
   confidence: string | undefined
 }
 
 function Result({ result, confidence } : IResult) {
+  // State variables
   const [percent, setPercent] = useState<number>(0);
 
   useEffect(() => {
+    // Incrementally update the percent state to simulate animation
     if (confidence) {
       let counter = 0;
       let i = setInterval(() => {

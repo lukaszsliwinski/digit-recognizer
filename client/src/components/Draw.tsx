@@ -9,9 +9,11 @@ import Button from './Button';
 import Result from './Result';
 
 function Draw() {
+  // Refs
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
   
+  // State variables
   const [recognizedDigit, setRecognizedDigit] = useState<number | null>(null);
   const [confidence, setConfidence] = useState<string | null>(null);
   const [disabled, setDisabled] = useState<boolean>(true);
@@ -21,14 +23,14 @@ function Draw() {
 
   const { screenHeight, screenWidth } = useWindowDimensions();
 
-  // Initialization when the component mounts for the first time
+  // Initialization when the component mounts or screenWidth changes
   useEffect(() => {
     if (canvasRef.current) {
       ctxRef.current = canvasRef.current.getContext('2d');
       const canvas = canvasRef.current;
         
       if (ctxRef.current && screenWidth) {
-        // set canvas dimenstions based on the screen width
+        // set canvas dimenstions based on screen width
         if (screenWidth >= 480) {
           canvas.width = 320;
           canvas.height = 320;
@@ -40,6 +42,7 @@ function Draw() {
           canvas.height = 224;
         };
 
+        // Configure drawing context
         ctxRef.current.lineCap = 'round';
         ctxRef.current.strokeStyle = 'black';
         ctxRef.current.lineWidth = 20;
@@ -51,7 +54,7 @@ function Draw() {
     }
   }, [screenWidth]);
 
-  // Prevent agains page scrolling when draw a digit on canvas on mobile
+  // Prevent scrolling on touch devices when interacting with the canvas
   useEffect(() => {
     const preventTouchScroll = (e: TouchEvent) => {
       if (canvasRef.current && canvasRef.current.contains(e.target as Node)) {
@@ -65,7 +68,8 @@ function Draw() {
     };
   }, []);
 
-  // Start, end and draw functions
+
+  // Start drawing on the canvas
   const startDrawing = (x: number, y: number) => {
     if (disabled) {
       setDisabled(false);
@@ -76,12 +80,13 @@ function Draw() {
     setIsDrawing(true);
   };
 
-  // Function for ending the drawing
+  // End drawing
   const endDrawing = () => {
     ctxRef?.current?.closePath();
     setIsDrawing(false);
   };
 
+  // Draw on the canvas
   const draw = (x: number, y: number) => {
     if (!isDrawing) {
       return;
@@ -104,6 +109,7 @@ function Draw() {
   const handleMouseUp = () => {
     endDrawing();
   };
+
 
   // Touch event handlers
   const handleTouchStart = (e: React.TouchEvent<HTMLCanvasElement>) => {
@@ -131,18 +137,20 @@ function Draw() {
   };
 
 
+  // Send the drawing to the server for recognition
   const recognize = async () => {
     if (canvasRef.current) {
+      // Convert canvas to data URL and then to Blob
       const dataURL = canvasRef.current.toDataURL('image/png');
       const response = await fetch(dataURL);
-      const blob = await response.blob(); // Convert to Blob
+      const blob = await response.blob();
     
-      // Create form data to send the image file and prepare axios data
+      // Prepare form data for the POST request
       const formData = new FormData();
       formData.append('img', blob, 'digit.png');
       const headers = {'Content-Type': 'multipart/form-data'}
 
-      // POST request
+      // Send request to the server
       axios
         .post('/api/recognize', formData, {headers: headers})
         .then(response => {
@@ -156,21 +164,23 @@ function Draw() {
       }
   }
 
+
+  // Reset the canvas and state
   const resetState = () => {
     if (ctxRef.current && canvasRef.current) {
+        // clear the canvas and redraw white background
         ctxRef.current.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-
-        // Redraw the white background after clearing
         ctxRef.current.fillStyle = 'white';
         ctxRef.current.fillRect(0, 0, canvasRef.current.width, canvasRef.current.height);
 
-        // disable recognize btn
+        // Reset state variables
         setDisabled(true);
         setRecognizedDigit(null);
         setConfidence(null);
     }
   };
 
+  
   return (
     <section className="flex flex-col justify-evenly items-center bg-neutral-50 w-full sm:w-[460px] h-[620px] rounded-xl shadow-xl mt-1 xs:mt-4 lg:mt-0">
       <Header text={'Draw a digit'} />

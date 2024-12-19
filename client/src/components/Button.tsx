@@ -1,3 +1,4 @@
+// Props
 interface IButton {
   type: "submit" | "reset" | "button" | undefined,
   click: React.MouseEventHandler<HTMLButtonElement> | undefined,

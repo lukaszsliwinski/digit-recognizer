@@ -6,8 +6,10 @@ const AlertContext = createContext<any>(null);
 
 // Context provider
 export const AlertProvider = ({ children }: { children: ReactNode }) => {
+  // State variable
   const [alert, setAlert] = useState<string>('');
 
+  // Function to show alert and auto-clear it after 3 seconds
   const showAlert = (text: string) => {
     setAlert(text);
 
@@ -24,7 +26,7 @@ export const AlertProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// useAlert reusable hook
+// Custom hook to access the AlertContext
 export const useAlert = () => {
   const context = useContext(AlertContext);
   if (!context) {

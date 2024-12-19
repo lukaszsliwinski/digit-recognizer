@@ -10,7 +10,12 @@ import Header from './Header';
 import Button from './Button';
 import Result from './Result';
 
+
 function Upload() {
+  // Ref
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  // State variables
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | undefined>(undefined);
   const [recognizedDigit, setRecognizedDigit] = useState<number | null>(null);
@@ -18,24 +23,10 @@ function Upload() {
   const [disabled, setDisabled] = useState<boolean>(true);
   const [isDragOver, setIsDragOver] = useState<boolean>(false);
 
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-
   const { showAlert } = useAlert();
 
-  // Reset app's state to initial values
-  const resetState = () => {
-    setSelectedFile(null);
-    setPreviewUrl(undefined);
-    setRecognizedDigit(null);
-    setConfidence(null);
-    setDisabled(true);
-
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
-  }
-
-  // Upload file
+  
+  // Handle file upload and prepare for recognition
   const uploadFile = (file: File) => {
     if (file && ['image/jpeg', 'image/png'].includes(file.type)) {
       setSelectedFile(file);
@@ -46,17 +37,17 @@ function Upload() {
         img.src = reader.result as string;
         
         img.onload = () => {
-          // Use canvas to resize the image to 28x28px
+          // Resize image to 28x28px using a canvas
           const canvas = document.createElement('canvas');
           canvas.width = 28;
           canvas.height = 28;
           const ctx = canvas.getContext('2d');
           
           if (ctx) {
-            // Draw the image on the canvas
+            // Draw resized image onto canvas
             ctx.drawImage(img, 0, 0, 28, 28);
             
-            // Convert the canvas to Blob
+            // Convert canvas content to Blob and update state
             canvas.toBlob((blob) => {
               if (blob) {
                 const resizedFile = new File([blob], file.name, { type: 'image/png' });
@@ -85,16 +76,17 @@ function Upload() {
     uploadFile(file!);
   };
 
-  // Handle submit form
+
+  // Handle submit form and send the image to the server for recognition
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
 
-    // Create form data to send the image file and prepare axios data
+    // Prepare form data for the POST request
     const formData = new FormData();
     formData.append('img', selectedFile!);
     const headers = {'Content-Type': 'multipart/form-data'}
 
-    // POST request
+    // Send request to the server
     axios
       .post('/api/recognize', formData, {headers: headers})
       .then(response => {
@@ -124,6 +116,21 @@ function Upload() {
     const file = event.dataTransfer.files[0];
     uploadFile(file);
   };
+
+
+  // Reset input and state
+  const resetState = () => {
+    setSelectedFile(null);
+    setPreviewUrl(undefined);
+    setRecognizedDigit(null);
+    setConfidence(null);
+    setDisabled(true);
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  }
+
 
   return (
     <section className="flex flex-col justify-evenly items-center bg-neutral-50 w-full sm:w-[460px] h-[620px] rounded-xl shadow-xl mb-1 xs:mb-4 lg:mb-0">

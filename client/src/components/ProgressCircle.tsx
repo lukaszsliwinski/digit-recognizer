@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 
 const ProgressCircle = ({ percent }: { percent: number }) => {
+  // State variable
   const [strokeColor, setStrokeColor] = useState<string>('rgb(255, 0, 0)');
 
+  // Determine color based on the progress percentage
   const getColor = (percent: number): string => {
     if (percent <= 70) {
       const red = 255;
@@ -15,6 +17,7 @@ const ProgressCircle = ({ percent }: { percent: number }) => {
     }
   };
 
+  // Update the color based on percentage
   useEffect(() => {
     const color = getColor(percent);
     setStrokeColor(color);

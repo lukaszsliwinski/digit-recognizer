@@ -1,15 +1,19 @@
 import { useEffect, useState } from "react";
 
 function Alert({ text }: { text: string }) {
+  // State variable
   const [visible, setVisible] = useState(false);
 
+  // Show the alert when the text changes
   useEffect(() => {
     setVisible(true);
 
+    // Hide the alert after 3 seconds
     const timeout = setTimeout(() => {
       setVisible(false);
     }, 3000);
 
+    // Cleanup timeout when the component unmounts or text changes
     return () => clearTimeout(timeout);
   }, [text]);
 
