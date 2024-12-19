@@ -6,14 +6,13 @@ import Draw from './components/Draw';
 function App() {
   return (
     <AlertProvider>
-      <main className="flex justify-center items-center w-full min-h-screen bg-background bg-cover bg-fixed bg-center">
-        <div className="flex flex-col lg:flex-row justify-evenly items-center w-full min-h-screen p-2 xs:p-8 lg:p-0 lg:h-[80vh] lg:min-h-[650px] bg-white/10 backdrop-blur-lg shadow-xl">
+      <main className="flex min-h-screen w-full items-center justify-center bg-background bg-cover bg-fixed bg-center">
+        <div className="flex min-h-screen w-full flex-col items-center justify-evenly bg-white/10 p-2 shadow-xl backdrop-blur-lg xs:p-8 lg:h-[80vh] lg:min-h-[650px] lg:flex-row lg:p-0">
           <Upload />
           <Draw />
         </div>
       </main>
     </AlertProvider>
-
   );
 }
 

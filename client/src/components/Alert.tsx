@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 function Alert({ text }: { text: string }) {
   // State variable
@@ -19,10 +19,7 @@ function Alert({ text }: { text: string }) {
 
   return (
     <div
-      className={`
-        fixed top-4 left-1/2 -translate-x-1/2 px-4 py-2 rounded-lg shadow-lg bg-red-500 text-white text-center text-lg transition-all duration-300 ease-in-out transform
-        ${visible ? "opacity-100 scale-100" : "opacity-0 scale-95"}
-      `}
+      className={`fixed left-1/2 top-4 -translate-x-1/2 transform rounded-lg bg-red-500 px-4 py-2 text-center text-lg text-white shadow-lg transition-all duration-300 ease-in-out ${visible ? 'scale-100 opacity-100' : 'scale-95 opacity-0'} `}
     >
       {text}
     </div>

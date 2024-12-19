@@ -1,19 +1,16 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    "./src/**/*.{js,jsx,ts,tsx}",
-  ],
+  content: ['./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
       screens: {
         xxs: '360px',
-        xs: '480px',
+        xs: '480px'
       },
       backgroundImage: {
-        'background': 'url("./assets/background.webp")',
-      },
-    },
+        background: 'url("./assets/background.webp")'
+      }
+    }
   },
-  plugins: [],
-}
-
+  plugins: []
+};

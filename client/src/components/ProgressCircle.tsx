@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 const ProgressCircle = ({ percent }: { percent: number }) => {
   // State variable
@@ -47,7 +47,7 @@ const ProgressCircle = ({ percent }: { percent: number }) => {
         ></circle>
       </svg>
 
-      <div className="absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2">
+      <div className="absolute start-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform">
         <span className="text-center text-2xl">{percent ? `${percent}%` : ''}</span>
       </div>
     </div>

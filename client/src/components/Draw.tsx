@@ -12,7 +12,7 @@ function Draw() {
   // Refs
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
-  
+
   // State variables
   const [recognizedDigit, setRecognizedDigit] = useState<number | null>(null);
   const [confidence, setConfidence] = useState<string | null>(null);
@@ -28,7 +28,7 @@ function Draw() {
     if (canvasRef.current) {
       ctxRef.current = canvasRef.current.getContext('2d');
       const canvas = canvasRef.current;
-        
+
       if (ctxRef.current && screenWidth) {
         // set canvas dimenstions based on screen width
         if (screenWidth >= 480) {
@@ -40,13 +40,13 @@ function Draw() {
         } else {
           canvas.width = 224;
           canvas.height = 224;
-        };
+        }
 
         // Configure drawing context
         ctxRef.current.lineCap = 'round';
         ctxRef.current.strokeStyle = 'black';
         ctxRef.current.lineWidth = 20;
-  
+
         // Fill the canvas with a white background
         ctxRef.current.fillStyle = 'white';
         ctxRef.current.fillRect(0, 0, canvasRef.current.width, canvasRef.current.height);
@@ -62,12 +62,11 @@ function Draw() {
       }
     };
     document.addEventListener('touchmove', preventTouchScroll, { passive: false });
-  
+
     return () => {
       document.removeEventListener('touchmove', preventTouchScroll);
     };
   }, []);
-
 
   // Start drawing on the canvas
   const startDrawing = (x: number, y: number) => {
@@ -96,7 +95,6 @@ function Draw() {
     ctxRef?.current?.stroke();
   };
 
-
   // Mouse event handlers
   const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
     startDrawing(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
@@ -110,7 +108,6 @@ function Draw() {
     endDrawing();
   };
 
-
   // Touch event handlers
   const handleTouchStart = (e: React.TouchEvent<HTMLCanvasElement>) => {
     const rect = canvasRef.current?.getBoundingClientRect();
@@ -121,7 +118,7 @@ function Draw() {
       startDrawing(x, y);
     }
   };
-  
+
   const handleTouchMove = (e: React.TouchEvent<HTMLCanvasElement>) => {
     const rect = canvasRef.current?.getBoundingClientRect();
     const touch = e.touches[0];
@@ -131,11 +128,10 @@ function Draw() {
       draw(x, y);
     }
   };
-  
+
   const handleTouchEnd = (e: React.TouchEvent<HTMLCanvasElement>) => {
     endDrawing();
   };
-
 
   // Send the drawing to the server for recognition
   const recognize = async () => {
@@ -144,16 +140,16 @@ function Draw() {
       const dataURL = canvasRef.current.toDataURL('image/png');
       const response = await fetch(dataURL);
       const blob = await response.blob();
-    
+
       // Prepare form data for the POST request
       const formData = new FormData();
       formData.append('img', blob, 'digit.png');
-      const headers = {'Content-Type': 'multipart/form-data'}
+      const headers = { 'Content-Type': 'multipart/form-data' };
 
       // Send request to the server
       axios
-        .post('/api/recognize', formData, {headers: headers})
-        .then(response => {
+        .post('/api/recognize', formData, { headers: headers })
+        .then((response) => {
           setRecognizedDigit(response.data.recognized_digit);
           setConfidence(response.data.confidence);
         })
@@ -161,32 +157,30 @@ function Draw() {
           showAlert('Server error, try again later!');
           resetState();
         });
-      }
-  }
-
+    }
+  };
 
   // Reset the canvas and state
   const resetState = () => {
     if (ctxRef.current && canvasRef.current) {
-        // clear the canvas and redraw white background
-        ctxRef.current.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-        ctxRef.current.fillStyle = 'white';
-        ctxRef.current.fillRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+      // clear the canvas and redraw white background
+      ctxRef.current.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+      ctxRef.current.fillStyle = 'white';
+      ctxRef.current.fillRect(0, 0, canvasRef.current.width, canvasRef.current.height);
 
-        // Reset state variables
-        setDisabled(true);
-        setRecognizedDigit(null);
-        setConfidence(null);
+      // Reset state variables
+      setDisabled(true);
+      setRecognizedDigit(null);
+      setConfidence(null);
     }
   };
 
-  
   return (
-    <section className="flex flex-col justify-evenly items-center bg-neutral-50 w-full sm:w-[460px] h-[620px] rounded-xl shadow-xl mt-1 xs:mt-4 lg:mt-0">
+    <section className="mt-1 flex h-[620px] w-full flex-col items-center justify-evenly rounded-xl bg-neutral-50 shadow-xl xs:mt-4 sm:w-[460px] lg:mt-0">
       <Header text={'Draw a digit'} />
       <div className="flex flex-col items-center">
         <canvas
-          className="border-2 border-gray-400 rounded w-56 xxs:w-64 xs:w-80 h-56 xxs:h-64 xs:h-80 hover:cursor-crosshair"
+          className="h-56 w-56 rounded border-2 border-gray-400 hover:cursor-crosshair xxs:h-64 xxs:w-64 xs:h-80 xs:w-80"
           onMouseDown={handleMouseDown}
           onMouseUp={handleMouseUp}
           onMouseMove={handleMouseMove}
@@ -195,7 +189,7 @@ function Draw() {
           onTouchEnd={handleTouchEnd}
           ref={canvasRef}
         />
-        <div className="flex justify-center items-center flex-col xxs:flex-row mt-4">
+        <div className="mt-4 flex flex-col items-center justify-center xxs:flex-row">
           <Button type="button" click={recognize} disabled={disabled} text={'RECOGNIZE'} />
           <Button type="button" click={resetState} disabled={undefined} text={'CLEAR'} />
         </div>

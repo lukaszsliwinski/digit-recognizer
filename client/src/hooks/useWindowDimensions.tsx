@@ -27,7 +27,7 @@ const useWindowDimensions = (): WindowDimentions => {
 
     // Listen for window resize
     window.addEventListener('resize', handleResize);
-    
+
     // Cleanup event listener when component unmounts
     return (): void => window.removeEventListener('resize', handleResize);
   }, []);
