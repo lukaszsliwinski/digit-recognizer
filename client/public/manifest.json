@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Digit recognizer",
+  "name": "Digit recognizer",
   "icons": [
     {
       "src": "favicon.ico",
