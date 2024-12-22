@@ -24,6 +24,21 @@ function Upload() {
 
   const { showAlert } = useAlert();
 
+  // Helper to adjust contrast
+  const adjustContrast = (imageData: ImageData, contrast: number): ImageData => {
+    const data = imageData.data;
+    const factor = (259 * (contrast + 255)) / (255 * (259 - contrast)); // Formula for contrast adjustment
+
+    for (let i = 0; i < data.length; i += 4) {
+      data[i] = truncate(factor * (data[i] - 128) + 128); // Red
+      data[i + 1] = truncate(factor * (data[i + 1] - 128) + 128); // Green
+      data[i + 2] = truncate(factor * (data[i + 2] - 128) + 128); // Blue
+    }
+    return imageData;
+  };
+
+  const truncate = (value: number) => Math.min(255, Math.max(0, value));
+
   // Handle file upload and prepare for recognition
   const uploadFile = (file: File) => {
     if (file && ['image/jpeg', 'image/png'].includes(file.type)) {
@@ -44,6 +59,11 @@ function Upload() {
           if (ctx) {
             // Draw resized image onto canvas
             ctx.drawImage(img, 0, 0, 28, 28);
+
+            // Adjust contrast
+            const imageData = ctx.getImageData(0, 0, 28, 28);
+            const adjustedImageData = adjustContrast(imageData, 50); // TODO: adjust the contrast ratio
+            ctx.putImageData(adjustedImageData, 0, 0);
 
             // Convert canvas content to Blob and update state
             canvas.toBlob((blob) => {
