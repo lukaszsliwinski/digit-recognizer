@@ -43,6 +43,7 @@ function Upload() {
   const uploadFile = (file: File) => {
     if (file && ['image/jpeg', 'image/png'].includes(file.type)) {
       setSelectedFile(file);
+      showAlert({ type: 'warning', text: 'Important: if the image is unreadable, upload a better quality one!' })
 
       const reader = new FileReader();
       reader.onloadend = () => {
