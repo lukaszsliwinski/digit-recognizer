@@ -154,7 +154,7 @@ function Draw() {
           setConfidence(response.data.confidence);
         })
         .catch(() => {
-          showAlert('Server error, try again later!');
+          showAlert({ type: 'error', text: 'Server error, try again later!' });
           resetState();
         });
     }

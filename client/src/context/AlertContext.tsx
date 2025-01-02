@@ -4,24 +4,29 @@ import Alert from '../components/Alert';
 // Create context
 const AlertContext = createContext<any>(null);
 
+interface IAlert {
+  type: 'default' | 'warning' | 'error';
+  text: string;
+}
+
 // Context provider
 export const AlertProvider = ({ children }: { children: ReactNode }) => {
   // State variable
-  const [alert, setAlert] = useState<string>('');
+  const [alert, setAlert] = useState<IAlert>({ type: 'default', text: '' });
 
   // Function to show alert and auto-clear it after 3 seconds
-  const showAlert = (text: string) => {
-    setAlert(text);
+  const showAlert = ({ type, text }: IAlert) => {
+    setAlert({ type: type, text: text });
 
     setTimeout(() => {
-      setAlert('');
+      setAlert({ type: 'default', text: '' });
     }, 3000);
   };
 
   return (
     <AlertContext.Provider value={{ showAlert }}>
       {children}
-      {alert && <Alert text={alert} />}
+      {alert && <Alert type={alert.type} text={alert.text} />}
     </AlertContext.Provider>
   );
 };

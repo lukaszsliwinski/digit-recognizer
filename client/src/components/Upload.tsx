@@ -83,7 +83,7 @@ function Upload() {
       setRecognizedDigit(null);
     } else {
       resetState();
-      showAlert('Please select a valid JPG or PNG image.');
+      showAlert({ type: 'error', text: 'Please select a valid JPG or PNG image.' });
     }
   };
 
@@ -111,7 +111,7 @@ function Upload() {
       })
       .catch(() => {
         resetState();
-        showAlert('Error uploading image, try again later!');
+        showAlert({ type: 'error', text: 'Error uploading image, try again later!' });
       });
   };
 
