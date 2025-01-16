@@ -177,7 +177,9 @@ function Draw() {
 
   return (
     <section className="mt-1 flex h-[620px] w-full flex-col items-center justify-evenly rounded-xl bg-neutral-50 shadow-xl xs:mt-4 sm:w-[460px] lg:mt-0">
-      <Header text={'Draw a digit'} />
+      <div className="h-16">
+        <Header text={'Draw a digit'} />
+      </div>
       <div className="flex flex-col items-center">
         <canvas
           className="h-56 w-56 rounded border-2 border-gray-400 hover:cursor-crosshair xxs:h-64 xxs:w-64 xs:h-80 xs:w-80"

@@ -28,7 +28,10 @@ function Upload() {
   const uploadFile = (file: File) => {
     if (file && ['image/jpeg', 'image/png'].includes(file.type)) {
       setSelectedFile(file);
-      showAlert({ type: 'warning', text: 'Important: if the image is unreadable, upload a better quality one!' })
+      showAlert({
+        type: 'warning',
+        text: 'Important: if the image is unreadable, upload a better quality one!'
+      });
 
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -128,7 +131,12 @@ function Upload() {
 
   return (
     <section className="mb-1 flex h-[620px] w-full flex-col items-center justify-evenly rounded-xl bg-neutral-50 shadow-xl xs:mb-4 sm:w-[460px] lg:mb-0">
-      <Header text={'Upload an image'} />
+      <div className="h-16">
+        <Header text={'Upload an image'} />
+        <p className="mt-1 text-sm font-semibold text-gray-400">
+          - black number on white background -
+        </p>
+      </div>
       <form onSubmit={handleSubmit} className="flex flex-col items-center">
         <div
           onClick={() => fileInputRef.current?.click()}
