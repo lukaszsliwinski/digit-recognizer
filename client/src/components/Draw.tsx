@@ -176,7 +176,7 @@ function Draw() {
   };
 
   return (
-    <section className="mt-1 flex h-[620px] w-full flex-col items-center justify-evenly rounded-xl bg-neutral-50 shadow-xl xs:mt-4 sm:w-[460px] lg:mt-0">
+    <section className="mb-1 flex h-[620px] w-full flex-col items-center justify-evenly rounded-xl bg-neutral-50 shadow-xl xs:mt-4 sm:w-[460px] lg:mt-0">
       <div className="h-16">
         <Header text={'Draw a digit'} />
       </div>

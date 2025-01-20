@@ -130,7 +130,7 @@ function Upload() {
   };
 
   return (
-    <section className="mb-1 flex h-[620px] w-full flex-col items-center justify-evenly rounded-xl bg-neutral-50 shadow-xl xs:mb-4 sm:w-[460px] lg:mb-0">
+    <section className="mt-1 flex h-[620px] w-full flex-col items-center justify-evenly rounded-xl bg-neutral-50 shadow-xl xs:mb-4 sm:w-[460px] lg:mb-0">
       <div className="h-16">
         <Header text={'Upload an image'} />
         <p className="mt-1 text-sm font-semibold text-gray-400">
