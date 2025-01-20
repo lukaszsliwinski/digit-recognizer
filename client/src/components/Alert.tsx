@@ -37,7 +37,7 @@ function Alert({ type, text }: IAlert) {
 
   return (
     <div
-      className={`fixed left-1/2 top-8 -translate-x-1/2 transform rounded-lg ${bgClass} px-6 py-4 text-center text-xl text-white shadow-lg transition-all duration-300 ease-in-out ${visible ? 'scale-100 opacity-100' : 'scale-95 opacity-0'} `}
+      className={`fixed bottom-8 w-full transform ${bgClass} px-6 py-4 text-center text-xl text-white shadow-lg transition-all duration-300 ease-in-out ${visible ? 'scale-100 opacity-100' : 'scale-95 opacity-0'} `}
     >
       {text}
     </div>
