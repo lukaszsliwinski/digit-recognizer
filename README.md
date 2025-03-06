@@ -21,7 +21,7 @@ Draw a digit and see real-time predictions.
 
 **Web development:**
 - Python / Flask for backend
-- Typescript / React / Tailwindcss for frontend
+- TypeScript / React / Tailwind CSS for frontend
 
 **Hosting:**
 - VPS server with Ubuntu
