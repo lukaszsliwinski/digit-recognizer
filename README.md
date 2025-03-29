@@ -11,6 +11,8 @@ This project is a complete AI-powered progresive web application for recognizing
 Check out the live demo:<br>
 https://digitrecognizer.lukaszsliwinski.pl
 
+![Website Preview](./preview.gif)
+
 Draw a digit and see real-time predictions.
 
 ## Used technologies and tools
