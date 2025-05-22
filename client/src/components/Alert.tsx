@@ -1,9 +1,5 @@
 import { useEffect, useState } from 'react';
-
-interface IAlert {
-  type: 'default' | 'warning' | 'error';
-  text: string;
-}
+import { IAlert } from '../types';
 
 function Alert({ type, text }: IAlert) {
   // State variable

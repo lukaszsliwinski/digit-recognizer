@@ -1,12 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import ProgressCircle from './ProgressCircle';
-
-// Props
-interface IResult {
-  result: string | undefined;
-  confidence: string | undefined;
-}
+import { IResult } from '../types';
 
 function Result({ result, confidence }: IResult) {
   // State variables

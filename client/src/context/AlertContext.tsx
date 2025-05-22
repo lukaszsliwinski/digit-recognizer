@@ -1,13 +1,9 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
 import Alert from '../components/Alert';
+import { IAlert } from '../types';
 
 // Create context
 const AlertContext = createContext<any>(null);
-
-interface IAlert {
-  type: 'default' | 'warning' | 'error';
-  text: string;
-}
 
 // Context provider
 export const AlertProvider = ({ children }: { children: ReactNode }) => {

@@ -1,10 +1,4 @@
-// Props
-interface IButton {
-  type: 'submit' | 'reset' | 'button' | undefined;
-  click: React.MouseEventHandler<HTMLButtonElement> | undefined;
-  disabled: boolean | undefined;
-  text: string;
-}
+import { IButton } from "../types";
 
 function Button({ type, click, disabled, text }: IButton) {
   return (
