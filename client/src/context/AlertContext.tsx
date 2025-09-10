@@ -3,7 +3,7 @@ import Alert from '../components/Alert';
 import { IAlert } from '../types';
 
 // Create context
-const AlertContext = createContext<any>(null);
+export const AlertContext = createContext<any>(null);
 
 // Context provider
 export const AlertProvider = ({ children }: { children: ReactNode }) => {
