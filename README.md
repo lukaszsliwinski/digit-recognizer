@@ -34,7 +34,7 @@ Draw a digit and see real-time predictions.
 1. Design and implement a convolutional neural network model using Pytorch.
 2. Train and validate model on the MNIST dataset.
 3. Deploy model using Flask backend.
-4. Create app using React Typescript and Tailwindcss for sending. images of handwritten digits and draw a digit in the app.
+4. Create app using React Typescript and Tailwindcss for drawing a digit in the app.
 5. Create mobile view and PWA to install app on smartphone.
 6. Test and optimization - tune the model by experimenting with batch size, learning rate, and epochs to minimize the gap between training and validation accuracy.
 

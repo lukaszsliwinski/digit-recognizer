@@ -32,8 +32,8 @@ function Draw() {
       if (ctxRef.current && screenWidth) {
         // set canvas dimenstions based on screen width
         if (screenWidth >= 480) {
-          canvas.width = 320;
-          canvas.height = 320;
+          canvas.width = 384;
+          canvas.height = 384;
         } else if (screenWidth < 480 && screenWidth >= 360) {
           canvas.width = 256;
           canvas.height = 256;
@@ -176,13 +176,11 @@ function Draw() {
   };
 
   return (
-    <section className="mb-1 flex h-[620px] w-full flex-col items-center justify-evenly rounded-xl bg-neutral-50 shadow-xl xs:mt-4 sm:w-[460px] lg:mt-0">
-      <div className="h-16">
-        <Header text={'Draw a digit'} />
-      </div>
+    <section className="flex h-[85vh] sm:h-[720px] w-full flex-col items-center justify-evenly rounded-xl bg-neutral-50 shadow-xl sm:w-[520px]">
+      <Header text={'Draw a digit'} />
       <div className="flex flex-col items-center">
         <canvas
-          className="h-56 w-56 rounded border-2 border-gray-400 hover:cursor-crosshair xxs:h-64 xxs:w-64 xs:h-80 xs:w-80"
+          className="h-64 w-64 rounded border-2 border-gray-400 hover:cursor-crosshair xxs:h-64 xxs:w-64 xs:h-96 xs:w-96"
           onMouseDown={handleMouseDown}
           onMouseUp={handleMouseUp}
           onMouseMove={handleMouseMove}
